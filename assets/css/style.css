@@ -21,3 +21,8 @@
     border: none;
     opacity: .75;
 }
+
+#uv {
+    border-radius: 5px;
+    padding: 5px;
+}

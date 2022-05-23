@@ -19,7 +19,7 @@
         <h1>Weather Dashboard</h1>
     </header>
 
-    <main class="container row cols-12 col-12">
+    <main class="row cols-12 col-12">
         <div id="panel" class="col-2">
             <div id="search">
                 <form>
@@ -30,8 +30,14 @@
             </div>
             <div id="history"></div>
         </div>
-        <div id="forecast" class="row col-10">
-            <div id="todayforecast"></div>
+        <div class="row col-10">
+            <div id="forecast" class="border border-primary col-12 m-1">
+                <span id="cityname" class="display-4 font-weight-bold">City</span><img id="weathericon" src=""><br>
+                <p>Temperature: <span id="temp"></span></p>
+                <p>Wind: <span id="wind"></span></p>
+                <p>Humidity: <span id="humidity"></span></p>
+                <p>UV Index: <span id="uv" class="text-light"></span></p>
+            </div>
             <div id="fivedayforecast"></div>
         </div>
     </main>
