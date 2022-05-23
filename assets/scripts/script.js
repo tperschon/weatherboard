@@ -6,20 +6,14 @@ fetch("https://raw.githubusercontent.com/manifestinteractive/openweathermap-citi
         return response.json();
     })
     .then(function(data) {
-        return data.RECORDS[0]
-    })
-    .then(function(city) {
-        console.log(city)
-        console.log(city.owm_latitude)
-        return city
-    })
-    .then(function(record) {
-        fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${record.owm_latitude}&lon=${record.owm_longitude}&appid=${key}`)
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(data) {
-                console.log(data)
-            })
+        console.log(data)
+        city = data.RECORDS[0]
+        fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${city.owm_latitude}&lon=${city.owm_longitude}&appid=${key}`)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data)
+        })
     })
 
