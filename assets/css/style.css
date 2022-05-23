@@ -4,6 +4,10 @@
     justify-content: center;
 }
 
+body {
+    position: relative;
+}
+
 #search {
     font-size: 30px;
     font-weight: bolder;
