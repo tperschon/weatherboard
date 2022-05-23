@@ -1,0 +1,23 @@
+#header {
+    background-color: blue; /* non-gradient browsers */
+    background-image: linear-gradient(to right, rgb(12, 101, 202), rgb(92, 36, 196));
+    justify-content: center;
+}
+
+#search {
+    font-size: 30px;
+    font-weight: bolder;
+    border-bottom: solid black 2px;
+    padding-bottom: 15px;
+}
+
+#search input {
+    font-size: 20px;
+    border-radius: 5px;
+    border-width: 1px;
+}
+
+#submit {
+    border: none;
+    opacity: .75;
+}
