@@ -34,7 +34,6 @@ function checkCity(data, cityname) {
             return;
         }
     }
-    console.log("he")
     getCityWeather(data, false);
 };
 
@@ -50,7 +49,7 @@ function getCityWeather(city, boolean = false) {
                 wind.text(`${data.current.wind_speed} ${units.speed}`);
                 humidity.text(`${data.current.humidity}%`);
                 uv.text(data.current.uvi);
-                colorUv(3, uv);
+                colorUv(data.current.uvi, uv);
                 weathericon.attr("src", "http://openweathermap.org/img/w/" + data.current.weather[0].icon + ".png");
             })
     }
@@ -65,11 +64,35 @@ function showError() {
 }
 
 function colorUv(uvindex, element) {
-    console.log(uvindex, element)
     if(uvindex < 3) element.attr("style", "background-color: green;");
     else if (uvindex < 6) element.attr("style", "background-color: yellow;");
     else if (uvindex < 8) element.attr("style", "background-color: orange;");
     else element.attr("style", "background-color: red;");
 };
 
-checkWeather("Tasssauro");
+
+function createHistoryItem(city) {
+    // create a button
+    var item = $("<button>");
+    // give the button text
+    item.text(city);
+    // give it a timestamp
+    
+    // style the button
+    item.attr("class", "col-12 my-1").attr("style", "border-radius: 5px;");
+    // append the button to the history section
+    $("#history").append(item);
+}
+
+$("#history").click(function(event) {
+    checkWeather(event.target.textContent)
+});
+
+$("form").submit(function(event) {
+    event.preventDefault();
+    checkWeather($("#searchcity").val());
+})
+checkWeather("Los Angeles");
+
+createHistoryItem("Midvale");
+console.log(Date.now())
