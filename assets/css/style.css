@@ -1,36 +1,34 @@
+/* gradient and center for the header */
 #header {
     background-color: blue; /* non-gradient browsers */
     background-image: linear-gradient(to right, rgb(12, 101, 202), rgb(92, 36, 196));
     justify-content: center;
 }
-
+/* formatting for the search area */
 #search {
     font-size: 30px;
     font-weight: bolder;
     border-bottom: solid black 2px;
     padding-bottom: 15px;
 }
-
+/* formatting for the search input */
 #search input {
     font-size: 20px;
     border-radius: 5px;
     border-width: 1px;
+    text-align: center;
 }
-
+/* no border on the submit button */
 #submit {
     border: none;
 }
-
+/* rounded edges on uv indexes */
 .uv {
     border-radius: 5px;
     padding: 5px;
 }
-
+/* grey history buttons with no borders */
 .historybutton {
     border: none;
     background-color: grey;
-}
-
-#searchcity {
-    text-align: center;
 }

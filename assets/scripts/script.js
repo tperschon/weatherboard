@@ -3,11 +3,11 @@ var key = "1f2cac8879443e031fb1b41ac0aa9314";
 var citiesUrl = "https://raw.githubusercontent.com/manifestinteractive/openweathermap-cities/master/data/owm_city_list.json";
 
 // configuration variables
-var maxHistory = 10;    // max number of history items to show
-var daysForecast = 7;   // number of days, up to 7, to get the future weather forecast
+var maxHistory = 10;                                                    // max number of history items to show
+var daysForecast = 7;                                                   // number of days, up to 7, to get the future weather forecast
+var unitSystem = "anything other than 'metric' defaults to imperial";   // the unit system to use, between imperial and metric, defaults to imperial
 
 // DOM element assignments
-// main forecast elements
 var forecast = $("#forecast");
 var cityspan = $("#cityname");
 var weathericon = $("#weathericon");
@@ -15,25 +15,26 @@ var temp = $("#temp");
 var wind = $("#wind");
 var humidity = $("#humidity");
 var uv = $("#uv");
-// fivedayforecast div
 var fiveday = $("#fivedayforecast");
 
 // local storage retrieval, if (weather)history exists then set it
 var storedWhistory = JSON.parse(localStorage.getItem("whistory"));
 var whistory = [];
 if (storedWhistory) whistory = storedWhistory;
-
-// object for unit system, built in for expanding to multiple unit systems
-var units = {
-    system: "imperial",
-    speed: "MPH",
-    degrees: "F",
-    language: "en-US"
-};
-
 // math to find out width each daily forecast card can take up
 daysForecast = maxNum(daysForecast, 7);
 var forecastWidth = (100 - daysForecast) / daysForecast;
+
+// units variables default
+var units = "imperial"
+var speed = "MPH";
+var degrees = "F";
+// if metric is specified, change to metric
+if (unitSystem === "metric") {
+    units = "metric";
+    speed = "M/S";
+    degrees = "C";
+};
 
 // with a given city name, fetch the list of cities and feed that data and the cityname to checkCity(), if something goes wrong show an error
 function getCities(cityname) {
@@ -56,7 +57,7 @@ function checkCity(data, cityname) {
         // if matching name found
         if (cityname.toUpperCase() === data.RECORDS[n].owm_city_name.toUpperCase()) {
             // set text of the city span to the city's name and the current date
-            cityspan.text(`${data.RECORDS[n].owm_city_name} (${new Date(Date.now()).toLocaleDateString(units.language)})`);
+            cityspan.text(`${data.RECORDS[n].owm_city_name} (${new Date(Date.now()).toLocaleDateString()})`);
             // create a history item of the city
             createHistoryItem(data.RECORDS[n].owm_city_name);
             // (re)populate the history
@@ -73,7 +74,7 @@ function checkCity(data, cityname) {
 
 // use given object to make an openweather one call and feed that data to various functions, if something goes wrong show an error
 function getCityWeather(city) {
-    var cityUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${city.owm_latitude}&lon=${city.owm_longitude}&appid=${key}&units=${units.system}`;
+    var cityUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${city.owm_latitude}&lon=${city.owm_longitude}&appid=${key}&units=${units}`;
     fetch(cityUrl)
         .then(function (response) {
             return response.json();
@@ -92,8 +93,8 @@ function showWeather(data) {
     // change visibility of the weather div
     $("#weather").addClass("visible").removeClass("invisible");
     // sets all the texts of the DOM elements for the current day's conditions
-    temp.text(`${data.current.temp} \u00B0${units.degrees}`);
-    wind.text(`${data.current.wind_speed} ${units.speed}`);
+    temp.text(`${data.current.temp} \u00B0${degrees}`);
+    wind.text(`${data.current.wind_speed} ${speed}`);
     humidity.text(`${data.current.humidity}%`);
     colorUv(data.current.uvi.toFixed(2), uv);
     weathericon.attr("src", "http://openweathermap.org/img/w/" + data.current.weather[0].icon + ".png");
@@ -108,13 +109,13 @@ function createFiveDayForecast(data) {
         // create a div to put each daily forecast in
         var forecast = $("<div>").attr("class", "bg-primary text-light rounded p-1").attr("style", `width: ${forecastWidth}%;`);
         // create and set the text of a h3 with the date in it
-        var fdate = $("<h3>").text(new Date(data.daily[i].dt * 1000).toLocaleDateString(units.language));
+        var fdate = $("<h3>").text(new Date(data.daily[i].dt * 1000).toLocaleDateString());
         // create and set the src of an image regarding that day's conditions
         var fimg = $("<img>").attr("src", "http://openweathermap.org/img/w/" + data.daily[i].weather[0].icon + ".png");
         // create and set the text of a paragraph with the temperature for that day
-        var ftemp = $("<p>").text(`Temp: ${data.daily[i].temp.day} \u00B0${units.degrees}`);
+        var ftemp = $("<p>").text(`Temp: ${data.daily[i].temp.day} \u00B0${degrees}`);
         // create and set the text of a paragraph with the wind for that day
-        var fwind = $("<p>").text(`Wind: ${data.daily[i].wind_speed} ${units.speed}`);
+        var fwind = $("<p>").text(`Wind: ${data.daily[i].wind_speed} ${speed}`);
         // create and set the text of a paragraph with the humidity for that day
         var fhumidity = $("<p>").text(`Humidity: ${data.daily[i].humidity}%`);
         // create and set the text of a span with title for uvi
@@ -126,9 +127,9 @@ function createFiveDayForecast(data) {
         // append all the other dom objects to our div
         forecast.append(fdate, fimg, ftemp, fwind, fhumidity, fuv, findex);
         // append our div to the forecast dom
-        $("#fivedayforecast").append(forecast)
-    }
-}
+        $("#fivedayforecast").append(forecast);
+    };
+};
 
 // takes in an element and a number
 function colorUv(uvindex, element) {
