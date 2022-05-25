@@ -158,7 +158,7 @@ function sortByTime(objectArray) {
         else return 0;
     });
     objectArray.reverse();
-}
+};
 
 function createHistoryButton(city) {
     // create a button
@@ -183,7 +183,8 @@ function populateHistory() {
     };
 };
 
-function removeDuplicates(objectArray) {
+// remove duplicates based on the city property from an object array
+function removeDuplicates(objectArray, property) {
     var newArray = [];
     for (i = 0; i < objectArray.length; i++) {
         var isDuplicate = false;
@@ -202,17 +203,15 @@ function maxNum(num, max) {
     if (num > max) return max;
     else return num;
 }
-populateHistory();
-
-function search(search) {
-    checkWeather(search);
-}
 
 $("#history").click(function(event) {
-    if(event.target.nodeName === "BUTTON") search(event.target.textContent);
+    if(event.target.nodeName === "BUTTON") checkWeather(event.target.textContent);
 });
 
 $("form").submit(function(event) {
     event.preventDefault();
-    search($("#searchcity").val());
+    checkWeather($("#searchcity").val());
 })
+
+
+populateHistory();
