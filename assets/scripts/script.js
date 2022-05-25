@@ -3,7 +3,7 @@ var key = "1f2cac8879443e031fb1b41ac0aa9314";
 var citiesUrl = "https://raw.githubusercontent.com/manifestinteractive/openweathermap-cities/master/data/owm_city_list.json";
 
 // configuration variables
-var maxHistory = 10;
+var maxHistory = 1;
 // DOM element assignments
 // main forecast elements
 var forecast = $("#forecast");
@@ -35,6 +35,7 @@ function checkWeather(cityname) {
             return response.json();
         })
         .then(function (data) {
+            console.log(data)
             checkCity(data, cityname)
         });
 };
@@ -42,13 +43,19 @@ function checkWeather(cityname) {
 // if user gave matching city name, get the citie's weather or give an error
 function checkCity(data, cityname) {
     // loop through all the cities in the list and check the name
-    for (i = 0; i < data.RECORDS.length; i++) {
+    for (n = 0; n < data.RECORDS.length; n++) {
         // if matching name found
-        if (cityname.toUpperCase() === data.RECORDS[i].owm_city_name.toUpperCase()) {
+        if (cityname.toUpperCase() === data.RECORDS[n].owm_city_name.toUpperCase()) {
+            //
             // set text of the city span to the city's name
-            cityspan.text(data.RECORDS[i].owm_city_name);
+            cityspan.text(data.RECORDS[n].owm_city_name);
+            // create a history item of the city
+            createHistoryItem(data.RECORDS[n].owm_city_name);
+            // (re)populate the history
+            populateHistory();
+            console.log(n)
             // run getCityWeather with the data
-            getCityWeather(data.RECORDS[i]);
+            getCityWeather(data.RECORDS[n]);
             // return if the city is found so we don't do the error call
             return;
         }
@@ -56,9 +63,11 @@ function checkCity(data, cityname) {
     // if we get through the loop without a match, given an error
     showError();
 };
-
 // use given object to make an openweather one call and feed that data to various functions
 function getCityWeather(city) {
+    console.log(city)
+    console.log(city.owm_latitude)
+    console.log(city.owm_longitude)
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${city.owm_latitude}&lon=${city.owm_longitude}&appid=${key}&units=${units.system}`)
         .then(function (response) {
             return response.json();
@@ -71,7 +80,6 @@ function getCityWeather(city) {
 
 // set up today's weather
 function showWeather(data) {
-    console.log(data);
     // 
     temp.text(`${data.current.temp} \u00B0${units.degrees}`);
     wind.text(`${data.current.wind_speed} ${units.speed}`);
@@ -155,7 +163,7 @@ function sortByTime(objectArray) {
         else return 0;
     });
     objectArray.reverse();
-}
+};
 
 function createHistoryButton(city) {
     // create a button
@@ -180,7 +188,8 @@ function populateHistory() {
     };
 };
 
-function removeDuplicates(objectArray) {
+// remove duplicates based on the city property from an object array
+function removeDuplicates(objectArray, property) {
     var newArray = [];
     for (i = 0; i < objectArray.length; i++) {
         var isDuplicate = false;
@@ -199,19 +208,15 @@ function maxNum(num, max) {
     if (num > max) return max;
     else return num;
 }
-populateHistory();
-
-function search(search) {
-    checkWeather(search);
-    createHistoryItem(search);
-    populateHistory();
-}
 
 $("#history").click(function(event) {
-    if(event.target.nodeName === "BUTTON") search(event.target.textContent);
+    if(event.target.nodeName === "BUTTON") checkWeather(event.target.textContent);
 });
 
 $("form").submit(function(event) {
     event.preventDefault();
-    search($("#searchcity").val());
+    checkWeather($("#searchcity").val());
 })
+
+
+populateHistory();
