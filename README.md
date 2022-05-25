@@ -8,6 +8,7 @@ When you first load the page, you will be presented with a screen that has a lab
 Entering a city into the search box and submitting the form, either through clicking or pressing the "Enter" key, will search for the weather in the city.
 The weather conditions displayed at the top of the page are the current weather conditions for the searched city.
 Below the current conditions, there will be cards for the next several days of weather in that city.
+Displayed conditions are: temperature, wind speed, humidity, uv index as well as an image representing the conditions, such as a sun for clear skies or a cloud for cloudy weather.
 Displayed conditions for current weather are current, however conditions for future days are forecasted averages.
 UV indexes will have a colored background indicating exposure levels. Green is low exposure, yellow is moderate, orange is high, red is very high.
 ```
