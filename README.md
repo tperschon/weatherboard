@@ -10,7 +10,7 @@ The weather conditions displayed at the top of the page are the current weather 
 Below the current conditions, there will be cards for the next several days of weather in that city.
 Displayed conditions are: temperature, wind speed, humidity, uv index as well as an image representing the conditions, such as a sun for clear skies or a cloud for cloudy weather.
 Displayed conditions for current weather are current, however conditions for future days are forecasted averages.
-UV indexes will have a colored background indicating exposure levels. Green is low exposure, yellow is moderate, orange is high, red is very high.
+UV indexes will have a colored background indicating exposure levels. Green is low exposure, yellow is moderate, orange is high, red is very high and purple is extreme.
 ```
 ![A used page with all elements shown.](assets/images/fullboard.png)
 ```

@@ -139,7 +139,8 @@ function colorUv(uvindex, element) {
     if (uvindex < 3) element.attr("style", "background-color: green;").addClass("text-light");
     else if (uvindex < 6) element.attr("style", "background-color: yellow;").addClass("text-dark");
     else if (uvindex < 8) element.attr("style", "background-color: orange;").addClass("text-dark");
-    else element.attr("style", "background-color: red;").addClass("text-light");
+    else if (uvindex < 11) element.attr("style", "background-color: red;").addClass("text-light");
+    else element.attr("style", "background-color: purple;").addClass("text-light");
 };
 
 // create a localstorage entry for a whistory item
