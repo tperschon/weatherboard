@@ -47,10 +47,6 @@ function checkCity(data, cityname) {
         if (cityname.toUpperCase() === data.RECORDS[i].owm_city_name.toUpperCase()) {
             // set text of the city span to the city's name
             cityspan.text(data.RECORDS[i].owm_city_name);
-            // create a history item of the city
-            createHistoryItem(data.RECORDS[i].owm_city_name);
-            // (re)populate the history
-            populateHistory();
             // run getCityWeather with the data
             getCityWeather(data.RECORDS[i]);
             // return if the city is found so we don't do the error call
@@ -60,6 +56,7 @@ function checkCity(data, cityname) {
     // if we get through the loop without a match, given an error
     showError();
 };
+
 // use given object to make an openweather one call and feed that data to various functions
 function getCityWeather(city) {
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${city.owm_latitude}&lon=${city.owm_longitude}&appid=${key}&units=${units.system}`)
@@ -158,7 +155,7 @@ function sortByTime(objectArray) {
         else return 0;
     });
     objectArray.reverse();
-};
+}
 
 function createHistoryButton(city) {
     // create a button
@@ -183,8 +180,7 @@ function populateHistory() {
     };
 };
 
-// remove duplicates based on the city property from an object array
-function removeDuplicates(objectArray, property) {
+function removeDuplicates(objectArray) {
     var newArray = [];
     for (i = 0; i < objectArray.length; i++) {
         var isDuplicate = false;
@@ -203,15 +199,19 @@ function maxNum(num, max) {
     if (num > max) return max;
     else return num;
 }
+populateHistory();
+
+function search(search) {
+    checkWeather(search);
+    createHistoryItem(search);
+    populateHistory();
+}
 
 $("#history").click(function(event) {
-    if(event.target.nodeName === "BUTTON") checkWeather(event.target.textContent);
+    if(event.target.nodeName === "BUTTON") search(event.target.textContent);
 });
 
 $("form").submit(function(event) {
     event.preventDefault();
-    checkWeather($("#searchcity").val());
+    search($("#searchcity").val());
 })
-
-
-populateHistory();
