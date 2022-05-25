@@ -4,7 +4,7 @@ var citiesUrl = "https://raw.githubusercontent.com/manifestinteractive/openweath
 
 // configuration variables
 var maxHistory = 10;    // max number of history items to show
-var daysForecast = 5;   // number of days, up to 7, to get the future weather forecast
+var daysForecast = 7;   // number of days, up to 7, to get the future weather forecast
 
 // DOM element assignments
 // main forecast elements
@@ -33,7 +33,7 @@ var units = {
 
 // math to find out width each daily forecast card can take up
 daysForecast = maxNum(daysForecast, 7);
-var forecastWidth = (100 - (daysForecast * 2)) / daysForecast;
+var forecastWidth = (100 - daysForecast) / daysForecast;
 
 // with a given city name, fetch the list of cities and feed that data and the cityname to checkCity(), if something goes wrong show an error
 function getCities(cityname) {
@@ -106,7 +106,7 @@ function createFiveDayForecast(data) {
     // loop through starting at 1 because 0 is today, create a forecast for each day
     for (i = 1; i < 1 + daysForecast; i++) {
         // create a div to put each daily forecast in
-        var forecast = $("<div>").attr("class", "bg-primary text-light rounded m-1 p-1").attr("style", `width: ${forecastWidth}%;`);
+        var forecast = $("<div>").attr("class", "bg-primary text-light rounded p-1").attr("style", `width: ${forecastWidth}%;`);
         // create and set the text of a h3 with the date in it
         var fdate = $("<h3>").text(new Date(data.daily[i].dt * 1000).toLocaleDateString(units.language));
         // create and set the src of an image regarding that day's conditions
@@ -231,7 +231,7 @@ $("form").submit(function (event) {
     // stop default submit functionality
     event.preventDefault();
     // pass the search's value into getCities()
-    if ($("#searchcity").val()) getCities($("#searchcity").val());
+    if ($("#searchcity").val()) getCities($("#searchcity").val().trim());
     else searchError();
     // clear the search field
     $("#searchcity").val("");
