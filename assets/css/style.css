@@ -4,10 +4,6 @@
     justify-content: center;
 }
 
-body {
-    position: relative;
-}
-
 #search {
     font-size: 30px;
     font-weight: bolder;
@@ -23,10 +19,18 @@ body {
 
 #submit {
     border: none;
-    opacity: .75;
 }
 
 .uv {
     border-radius: 5px;
     padding: 5px;
+}
+
+.historybutton {
+    border: none;
+    background-color: grey;
+}
+
+#searchcity {
+    text-align: center;
 }
