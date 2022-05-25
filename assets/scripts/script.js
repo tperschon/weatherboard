@@ -3,7 +3,7 @@ var key = "1f2cac8879443e031fb1b41ac0aa9314";
 var citiesUrl = "https://raw.githubusercontent.com/manifestinteractive/openweathermap-cities/master/data/owm_city_list.json";
 
 // configuration variables
-var maxHistory = 1;
+var maxHistory = 10;
 // DOM element assignments
 // main forecast elements
 var forecast = $("#forecast");
@@ -15,6 +15,8 @@ var humidity = $("#humidity");
 var uv = $("#uv");
 // fivedayforecast div
 var fiveday = $("#fivedayforecast");
+
+var test = [];
 
 // local storage retrieval, if (weather)history exists then set it
 var storedWhistory = JSON.parse(localStorage.getItem("whistory"));
@@ -35,9 +37,19 @@ function checkWeather(cityname) {
             return response.json();
         })
         .then(function (data) {
+            for (a = 0; a < data.length; a++) {
+                var tO = {
+                    city: data[a].owm_city_name,
+                    lat: data[a].owm_latitude,
+                    lon: data[a].owm_longitutde
+                }
+                test.append(tO)
+            }
+            console.log(test)
             console.log(data)
             checkCity(data, cityname)
-        });
+        })
+        .catch(citiesUrl)
 };
 
 // if user gave matching city name, get the citie's weather or give an error
@@ -61,8 +73,9 @@ function checkCity(data, cityname) {
         }
     }
     // if we get through the loop without a match, given an error
-    showError();
+    searchError();
 };
+
 // use given object to make an openweather one call and feed that data to various functions
 function getCityWeather(city) {
     console.log(city)
@@ -117,16 +130,6 @@ function createFiveDayForecast(data) {
         // append our div to the forecast dom
         $("#fivedayforecast").append(forecast)
     }
-}
-
-// show an error on the search isn't found
-function showError() {
-    // remove any existing warning so they don't stack up
-    $("#warning").remove();
-    // create the warning
-    var warning = $("<h4>").text("City could not be found.").attr("class", "text-danger").attr("id", "warning");
-    // append the warning after the search input
-    $("#searchcity").after(warning);
 }
 
 // takes in an element and a number
@@ -218,5 +221,19 @@ $("form").submit(function(event) {
     checkWeather($("#searchcity").val());
 })
 
+
+// show an error on the search isn't found
+function searchError() {
+    // remove any existing warning so they don't stack up
+    $("#warning").remove();
+    // create the warning
+    var warning = $("<h4>").text("City could not be found.").attr("class", "text-danger").attr("id", "warning");
+    // append the warning after the search input
+    $("#searchcity").after(warning);
+}
+
+function fetchError(url) {
+    alert(`There was an error retrieving data from the server @ ${url}`)
+}
 
 populateHistory();
