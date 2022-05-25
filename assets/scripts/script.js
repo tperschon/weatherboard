@@ -89,6 +89,8 @@ function getCityWeather(city) {
 
 // set up today's weather
 function showWeather(data) {
+    // change visibility of the weather div
+    $("#weather").addClass("visible").removeClass("invisible");
     // sets all the texts of the DOM elements for the current day's conditions
     temp.text(`${data.current.temp} \u00B0${units.degrees}`);
     wind.text(`${data.current.wind_speed} ${units.speed}`);
@@ -216,6 +218,7 @@ function maxNum(num, max) {
     else return num;
 };
 
+// if history div is clicked
 $("#history").click(function (event) {
     // clear the search field
     $("#searchcity").val("");
@@ -223,6 +226,7 @@ $("#history").click(function (event) {
     if (event.target.nodeName === "BUTTON") getCities(event.target.textContent);
 });
 
+// if form is submitted
 $("form").submit(function (event) {
     // stop default submit functionality
     event.preventDefault();
@@ -246,8 +250,10 @@ function searchError(cityname) {
     };
 };
 
+// error alert used by fetches as a catch
 function fetchError(url) {
     alert(`There was an error retrieving data from the server @ ${url}`);
 };
 
+// populate user's history on page load
 populateHistory();
